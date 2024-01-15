@@ -1,46 +1,40 @@
 <template>
   <div>
-    <van-row
-      align="center"
-      justify="space-around"
-      style="margin-top: 3vh; background-van-color: #fff; height: 100px"
-      @click="
-        () => {
-          router.push('/userinfo');
-        }
-      "
-    >
-      <van-col span="4" offset="1">
+    <van-cell style="margin-top: 3vh" is-link center to="userinfo">
+      <!-- 使用 title 插槽来自定义标题 -->
+      <template #icon>
         <van-image
           width="4rem"
           height="4rem"
           fit="cover"
           radius="10"
-          src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"
+          :src="user.image"
         />
-      </van-col>
-      <van-col span="18">
-        <van-cell
-          title="asdfasdf"
-          style="font-weight: 600; font-size: 16px"
-          :border="false"
-          is-link
-        />
-      </van-col>
-    </van-row>
+      </template>
+      <template #title>
+        <p
+          style="
+            font-weight: 600;
+            font-size: 20px;
+            margin-left: 10px;
+            color: #323233;
+          "
+        >
+          {{ user.username }}
+        </p>
+      </template>
+    </van-cell>
 
     <!-- 收藏发布浏览学校 -->
     <van-cell-group style="margin-top: 3vh">
       <van-cell
-        icon="description"
+        icon="friends-o"
         title="学校"
         is-link
-        to="van-college"
-        value="
-          请选择学校
-        "
+        to="college"
+        :value="user.school ? user.school : '请选择学校'"
       />
-      <van-cell icon="star-o" title="收藏" is-link to="van-collection" />
+      <van-cell icon="star-o" title="收藏" is-link to="collection" />
       <van-cell icon="bullhorn-o" title="发布过" is-link to="posted" />
       <van-cell
         icon="browsing-history-o"
@@ -111,10 +105,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { getCurrentUser } from "@/service/user";
 import TabBar from "@/components/TabBar.vue";
 
+let user = ref({});
 const showBottom = ref(false);
+const router = useRouter();
+
+// 进入这个页面后获取用户信息
+onMounted(async () => {
+  const res = await getCurrentUser();
+  user.value = res;
+  console.log(user);
+});
 </script>
 
 <style scoped></style>
