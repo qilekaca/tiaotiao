@@ -13,18 +13,12 @@ axios.defaults.headers["authorization"] = localStorage.getItem("token") || "";
 axios.interceptors.response.use(
   (response) => {
     console.log("axios-response响应拦截器", response);
-    // {
-    //   config,
-    //   data,
-    //   status,
-    //   statusText
-    // }
     // TODO: 添加用户未登陆拦截
     return response.data;
   },
   (error) => {
     console.log("axios-error响应拦截器" + error);
-    return Promise.reject(error.response.data.errors[0]);
+    return Promise.reject(error.response.data);
   }
 );
 

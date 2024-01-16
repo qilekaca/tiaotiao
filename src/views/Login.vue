@@ -112,12 +112,16 @@ const Login = async () => {
     // res.token
     localStorage.setItem("token", `Bearer ${res.token}`);
     // 显示登陆成功信息并跳转到我的页面
+    // 刷新页面
     showNotify({ type: "success", message: "登陆成功" });
-    router.push("/my");
+    router.replace("/my");
+    setTimeout(() => {
+      location.reload();
+    }, 100);
     console.log("res:", res);
   } catch (error) {
     console.log("res-err:", error);
-    showFailToast(error.msg);
+    showFailToast(error.errors[0].msg);
   }
 };
 
@@ -131,7 +135,7 @@ const Register = async () => {
     console.log("res:", res);
   } catch (error) {
     console.log("res-err:", error);
-    showFailToast(error.msg);
+    showFailToast(error.errors[0].msg);
   }
 };
 </script>

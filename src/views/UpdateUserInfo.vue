@@ -43,6 +43,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getCurrentUser, updateUser } from "@/service/user";
 import { uploadImage } from "@/service/file";
+import { showFailToast } from "vant";
 
 const onClickLeft = () => history.back();
 
@@ -79,12 +80,11 @@ const afterRead = async (file) => {
     console.log(imageUrl);
 
     // 更新用户信息
-    let data = {
+    const user = await updateUser({
       user: {
         image: imageUrl,
       },
-    };
-    const user = await updateUser(data);
+    });
     router.replace("/my");
     console.log(user);
   } catch (error) {
@@ -96,16 +96,16 @@ const afterRead = async (file) => {
 
 const setUsername = async () => {
   try {
-    const data = {
+    const user = await updateUser({
       user: {
         username: username.value,
       },
-    };
-    const user = await updateUser(data);
+    });
     router.replace("/my");
     console.log(user);
   } catch (error) {
     console.log(error);
+    showFailToast(error.msg);
   }
 };
 </script>

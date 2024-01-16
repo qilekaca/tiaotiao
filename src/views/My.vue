@@ -31,7 +31,7 @@
         icon="friends-o"
         title="学校"
         is-link
-        to="college"
+        to="school"
         :value="user.school ? user.school : '请选择学校'"
       />
       <van-cell icon="star-o" title="收藏" is-link to="collection" />
