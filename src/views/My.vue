@@ -118,7 +118,7 @@ const router = useRouter();
 onMounted(async () => {
   const res = await getCurrentUser();
   user.value = res;
-  console.log(user);
+  console.log(user.value);
 });
 </script>
 
