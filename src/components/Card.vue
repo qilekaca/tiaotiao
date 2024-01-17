@@ -97,9 +97,10 @@
 </template>
 
 <script setup>
-const props = defineProps(["post"]);
+import { showImagePreview } from "vant";
 import { useRouter } from "vue-router";
 
+const props = defineProps(["post"]);
 const router = useRouter();
 
 const toPostInfo = () => {
