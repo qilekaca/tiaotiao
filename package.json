@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@vant/area-data": "^1.5.1",
     "axios": "^1.6.4",
+    "moment": "^2.30.1",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "vant": "^4.8.2",
@@ -21,6 +22,7 @@
     "@vant/auto-import-resolver": "^1.0.2",
     "@vitejs/plugin-vue": "^4.5.2",
     "unplugin-vue-components": "^0.26.0",
+    "vconsole": "^3.15.1",
     "vite": "^5.0.8"
   }
 }

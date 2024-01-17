@@ -41,7 +41,7 @@
                 <p
                   style="margin-left: 10px; van-color: #808695; font-size: 10px"
                 >
-                  {{ post.createdAt }}
+                  {{ formatDate(post.createdAt) }}
                 </p>
               </van-col>
             </van-row>
@@ -99,6 +99,7 @@
 <script setup>
 import { showImagePreview } from "vant";
 import { useRouter } from "vue-router";
+import { formatDate } from "../utils/common";
 
 const props = defineProps(["post"]);
 const router = useRouter();
