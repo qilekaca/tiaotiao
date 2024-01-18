@@ -2,8 +2,8 @@ import axios from "axios";
 
 axios.defaults.baseURL =
   import.meta.env.MODE == "development"
-    ? "http://localhost:3000/api"
-    : "production。。。。。。。";
+    ? "http://192.168.31.148:3000/api"
+    : "http://192.168.31.148:3000/api";
 
 // 请求头添加 token
 // ⚠️修改此文件需要重启项目使其生效
