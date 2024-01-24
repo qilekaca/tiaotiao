@@ -106,13 +106,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+
 import { getCurrentUser } from "@/service/user";
 import TabBar from "@/components/TabBar.vue";
 
 let user = ref({});
 const showBottom = ref(false);
-const router = useRouter();
 
 // 进入这个页面后获取用户信息
 onMounted(async () => {

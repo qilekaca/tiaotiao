@@ -1,4 +1,6 @@
 import axios from "axios";
+import { showFailToast } from "vant";
+import router from "../router";
 
 axios.defaults.baseURL =
   import.meta.env.MODE == "development"
@@ -17,8 +19,13 @@ axios.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    console.log(error);
+    if (error?.response?.status == 401) {
+      router.replace("/login");
+    }
     console.log("axios-error响应拦截器" + error);
-    return Promise.reject(error.response.data);
+    showFailToast(error?.response?.data?.errors[0]?.msg);
+    return Promise.reject(error?.response?.data);
   }
 );
 

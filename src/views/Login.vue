@@ -107,22 +107,17 @@ const Login = async () => {
     username: loginUserInfo.loginUsername,
     password: loginUserInfo.loginPassword,
   };
-  try {
-    const res = await login({ user });
-    // res.token
-    localStorage.setItem("token", `Bearer ${res.token}`);
-    // 显示登陆成功信息并跳转到我的页面
-    // 刷新页面
-    showNotify({ type: "success", message: "登陆成功" });
-    router.replace("/my");
-    setTimeout(() => {
-      location.reload();
-    }, 100);
-    console.log("res:", res);
-  } catch (error) {
-    console.log("res-err:", error);
-    showFailToast(error.errors[0].msg);
-  }
+  const res = await login({ user });
+  // res.token
+  localStorage.setItem("token", `Bearer ${res.token}`);
+  // 显示登陆成功信息并跳转到我的页面
+  // 刷新页面
+  showNotify({ type: "success", message: "登陆成功" });
+  router.replace("/my");
+  setTimeout(() => {
+    location.reload();
+  }, 100);
+  console.log("res:", res);
 };
 
 const Register = async () => {
@@ -130,13 +125,8 @@ const Register = async () => {
     username: registerUserInfo.registerUserName,
     password: registerUserInfo.reRegisterUserPassword,
   };
-  try {
-    const res = await register({ user });
-    console.log("res:", res);
-  } catch (error) {
-    console.log("res-err:", error);
-    showFailToast(error.errors[0].msg);
-  }
+  const res = await register({ user });
+  console.log("res:", res);
 };
 </script>
 

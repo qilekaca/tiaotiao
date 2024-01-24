@@ -31,3 +31,7 @@ export function formatDate(createTime) {
     return "昨天";
   }
 }
+
+export function formatImageUrl(urls) {
+  return urls.map((url) => `${process.env.URL}${url}`);
+}
