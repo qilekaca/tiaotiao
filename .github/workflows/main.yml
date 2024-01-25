@@ -29,7 +29,7 @@ jobs:
           SECRET_ID: ${{ secrets.TCLOUD_API_ID }}
           SECRET_KEY: ${{ secrets.TCLOUD_API_KEY }}
           BUCKET: ${{ secrets.TCLOUD_BUCKET }}
-          REGION: ${{ secrets.REGION }}
+          REGION: ${{ secrets.TCLOUD_REGION }}
         run: |
           coscmd config -a $SECRET_ID -s $SECRET_KEY -b $BUCKET -r $REGION
 
