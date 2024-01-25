@@ -28,8 +28,8 @@ jobs:
         env:
           SECRET_ID: ${{ secrets.TCLOUD_API_ID }}
           SECRET_KEY: ${{ secrets.TCLOUD_API_KEY }}
-          BUCKET: pisces-1321337993
-          REGION: ap-beijing
+          BUCKET: ${{ secrets.TCLOUD_BUCKET }}
+          REGION: ${{ secrets.REGION }}
         run: |
           coscmd config -a $SECRET_ID -s $SECRET_KEY -b $BUCKET -r $REGION
 
