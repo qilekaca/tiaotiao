@@ -27,6 +27,8 @@
               preview-size="25vw"
               multiple
               :max-count="3"
+              :after-read="afterRead"
+              :before-delete="beforeDelete"
             />
           </template>
         </van-field>
@@ -58,7 +60,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { showLoadingToast, closeToast } from "vant";
 import { getCurrentUser } from "../service/user";
-import { uploadImages } from "../service/file";
+import { uploadImage, deleteImage } from "../service/file";
 import { createPost } from "../service/post";
 
 const user = ref({});
@@ -81,6 +83,41 @@ onMounted(async () => {
   user.value = userinfo;
 });
 
+const afterRead = async (file) => {
+  if (Array.isArray(file)) {
+    file.map(async (file) => {
+      file.status = "uploading";
+      const res = await uploadImage({ file });
+      console.log(res);
+      if (res.err) {
+        file.status = "failed";
+      }
+      file.status = "done";
+      file.objectUrl = `https://${res.data.Location}`;
+    });
+  } else {
+    file.status = "uploading";
+    const res = await uploadImage({ file });
+    console.log(res);
+    if (res.err) {
+      file.status = "failed";
+    }
+    file.status = "done";
+    file.objectUrl = `https://${res.data.Location}`;
+  }
+};
+
+const beforeDelete = async (file) => {
+  const res = await deleteImage(file.objectUrl.split("/")[3]);
+  if (!res.err) {
+    console.log("删除成功");
+    return true;
+  } else {
+    console.log("删除失败");
+    return false;
+  }
+};
+
 const submit = async (form) => {
   showLoadingToast({
     duration: 0,
@@ -94,30 +131,24 @@ const submit = async (form) => {
     price: form.price ? form.price : 0,
   };
 
-  try {
-    if (form.uploader.length != 0) {
-      console.log(form.uploader);
-      const newList = form.uploader.map((e) => {
-        return {
-          data: e.content,
-          contentType: e.file.type,
-        };
-      });
-      console.log(newList);
-      const res = await uploadImages({ list: newList });
-      console.log(res);
-      post.images = res.imageList;
-      post.imagesId = res.idList;
-    }
-    console.log(post);
-    const res = await createPost({ post });
-    console.log(res);
-    // router.replace("/home");
-  } catch (error) {
-    console.log(error);
-  }
+  // console.log(fileList.value);
+  // const files = [];
+  // fileList.value.map(async (file) => {
+  //   file.status = "uploading";
+  //   const res = await uploadImage({ file });
+  //   console.log(res);
+  //   if (res.err) {
+  //     file.status = "failed";
+  //   }
+  //   file.status = "done";
+  //   file.objectUrl = `https://${res.data.Location}`;
+  //   // files.push(file.objectUrl);
+  // });
+
+  // console.log(fileList);
 
   closeToast();
+  // router.replace("/home");
 };
 </script>
 

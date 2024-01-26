@@ -108,6 +108,7 @@ const Login = async () => {
     password: loginUserInfo.loginPassword,
   };
   const res = await login({ user });
+  console.log("res:", res);
   // res.token
   localStorage.setItem("token", `Bearer ${res.token}`);
   // 显示登陆成功信息并跳转到我的页面
@@ -117,7 +118,6 @@ const Login = async () => {
   setTimeout(() => {
     location.reload();
   }, 100);
-  console.log("res:", res);
 };
 
 const Register = async () => {
