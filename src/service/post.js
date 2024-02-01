@@ -15,6 +15,11 @@ export function getPost(postid) {
   return axios.get(`/posts/${postid}`);
 }
 
+// 删除
+export function deletePost(postid) {
+  return axios.delete(`/posts/${postid}`);
+}
+
 // 获取评论
 export function getPostComment(postid) {
   return axios.get(`/posts/${postid}/comments`);

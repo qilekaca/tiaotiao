@@ -19,8 +19,3 @@ export function uploadImages(body) {
 export function getImage(id) {
   return axios.get(`/file/${id}`);
 }
-
-// 删除图片
-// export function deleteImage(id) {
-//   return axios.delete(`/file/${id}`);
-// }

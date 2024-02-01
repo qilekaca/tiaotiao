@@ -31,6 +31,7 @@ import { getPosts } from "@/service/post";
 import { getCurrentUser } from "../service/user";
 import Card from "@/components/Card.vue";
 import TabBar from "@/components/TabBar.vue";
+import _ from "lodash";
 
 const active = ref("OutCollegeList");
 
@@ -52,7 +53,7 @@ const finished = ref(false);
 const refreshing = ref(false);
 const router = useRouter();
 
-const onLoad = async () => {
+const onLoad = _.debounce(async () => {
   const getCount = 15;
   console.log("获取数据");
 
@@ -83,7 +84,7 @@ const onLoad = async () => {
     console.log("加载完成");
     finished.value = true;
   }
-};
+}, 100);
 
 const onRefresh = async () => {
   finished.value = false;
@@ -93,7 +94,6 @@ const onRefresh = async () => {
 };
 
 const beforeChange = async (name) => {
-  console.log(name);
   try {
     const user = await getCurrentUser();
     if (!user.school) {

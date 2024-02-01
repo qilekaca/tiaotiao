@@ -7,7 +7,7 @@
           justify="center"
           class="van-hairline--bottom"
           v-if="$route.path == '/posted'"
-          @click="$emit('handlePost', post._id, post.fileList)"
+          @click="$emit('handlePost', post._id)"
         >
           <van-col span="22" style="height: 30px" class="delete-wrapper">
             <div>
@@ -85,9 +85,15 @@
                 font-size: 10px;
               "
             >
-              <van-col span="8"><van-icon name="eye-o" /> 8</van-col>
-              <van-col span="8"><van-icon name="star-o" /> 8</van-col>
-              <van-col span="8"><van-icon name="comment-o" /> 8</van-col>
+              <van-col span="8">
+                <van-icon name="eye-o" />{{ post.viewCount }}
+              </van-col>
+              <van-col span="8">
+                <van-icon name="star-o" />{{ post.favouritesCount }}
+              </van-col>
+              <van-col span="8">
+                <van-icon name="comment-o" />{{ post.commentsCount }}
+              </van-col>
             </van-row>
           </van-col>
         </van-row>

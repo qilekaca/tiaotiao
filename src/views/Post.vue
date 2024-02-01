@@ -131,24 +131,16 @@ const submit = async (form) => {
     price: form.price ? form.price : 0,
   };
 
-  // console.log(fileList.value);
-  // const files = [];
-  // fileList.value.map(async (file) => {
-  //   file.status = "uploading";
-  //   const res = await uploadImage({ file });
-  //   console.log(res);
-  //   if (res.err) {
-  //     file.status = "failed";
-  //   }
-  //   file.status = "done";
-  //   file.objectUrl = `https://${res.data.Location}`;
-  //   // files.push(file.objectUrl);
-  // });
+  if (fileList.value.length) {
+    post.images = fileList.value.map((file) => file.objectUrl);
+  }
 
-  // console.log(fileList);
+  const res = await createPost({ post });
+
+  console.log(res);
 
   closeToast();
-  // router.replace("/home");
+  router.replace("/home");
 };
 </script>
 

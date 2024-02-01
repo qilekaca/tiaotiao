@@ -14,16 +14,17 @@ axios.defaults.headers["authorization"] = localStorage.getItem("token") || "";
 // 响应拦截器
 axios.interceptors.response.use(
   (response) => {
-    console.log("axios-response响应拦截器", response);
+    // console.log("axios-response响应拦截器", response);
     // TODO: 添加用户未登陆拦截
     return response.data;
   },
   (error) => {
     console.log(error);
     if (error?.response?.status == 401) {
+      showFailToast("登陆已失效");
       router.replace("/login");
     }
-    console.log("axios-error响应拦截器" + error);
+    // console.log("axios-error响应拦截器" + error);
     showFailToast(error?.response?.data?.errors[0]?.msg);
     return Promise.reject(error?.response?.data);
   }

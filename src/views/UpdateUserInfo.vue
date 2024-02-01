@@ -72,16 +72,13 @@ const afterRead = async (file) => {
 
   try {
     // 上传图片
-    const imageUrl = await uploadImage({
-      list: [{ data: file.content, contentType: file.file.type }],
-    });
-    // res返回格式: http://localhost:3000/api/file/65a54e6b50a8f1a67d37ee0d
-    console.log(imageUrl);
+    const res = await uploadImage({ file });
 
     // 更新用户信息
+    // TODO:上传新头像后删除旧头像
     const user = await updateUser({
       user: {
-        image: imageUrl.imageList[0],
+        image: `https://${res.data.Location}`,
       },
     });
     router.replace("/my");

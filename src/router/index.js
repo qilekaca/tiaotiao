@@ -22,6 +22,7 @@ const router = createRouter({
     {
       path: "/home",
       name: "Home",
+      meta: { keepAlive: true },
       component: () => import("../views/Home.vue"),
     },
     {
@@ -48,6 +49,11 @@ const router = createRouter({
       path: "/post",
       name: "post",
       component: () => import("../views/Post.vue"),
+    },
+    {
+      path: "/posted",
+      name: "posted",
+      component: () => import("../views/Posted.vue"),
     },
     {
       path: "/postinfo/:postid",

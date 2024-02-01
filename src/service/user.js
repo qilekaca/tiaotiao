@@ -15,3 +15,7 @@ export function login(params) {
 export function register(params) {
   return axios.post("/users/register", params);
 }
+
+export function addCollection(postid) {
+  return axios.put(`/user/${postid}`);
+}

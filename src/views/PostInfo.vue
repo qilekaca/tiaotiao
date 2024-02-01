@@ -70,15 +70,15 @@
           <van-skeleton title :loading="loading">
             <van-col span="8" class="view-bar">
               <van-icon name="eye-o" size="large" />
-              <p>{{ postinfo.favoritesCount }}</p>
+              <p>{{ postinfo.viewCount }}</p>
             </van-col>
             <van-col span="8" class="view-bar">
               <van-icon name="star-o" size="large" />
-              <p>{{ postinfo.favoritesCount }}</p>
+              <p>{{ postinfo.favouritesCount }}</p>
             </van-col>
             <van-col span="8" class="view-bar">
               <van-icon name="comment-o" size="large" />
-              <p>{{ postinfo.favoritesCount }}</p>
+              <p>{{ postinfo.commentsCount }}</p>
             </van-col>
           </van-skeleton>
         </van-row>
@@ -93,8 +93,15 @@
         span="12"
         class="handle-barn-item"
         style="border-right: 1px solid #dcdee0"
+        @click="handleCollection(postinfo._id)"
       >
-        <van-icon name="star-o" size="large" />
+        <van-icon
+          v-if="checkIfCollection"
+          name="star"
+          color="#1989fa"
+          size="large"
+        />
+        <van-icon v-else name="star-o" size="large" />
         <p style="margin-left: 5px">收藏</p>
       </van-col>
       <van-col span="12" class="handle-barn-item" @click="handleComment">
@@ -141,7 +148,7 @@ import { useRoute, useRouter } from "vue-router";
 import { onMounted, ref, nextTick, watch } from "vue";
 import { getPost } from "../service/post";
 import { formatDate } from "../utils/common";
-import { getCurrentUser } from "../service/user";
+import { getCurrentUser, addCollection } from "../service/user";
 import CommentList from "../components/CommentList.vue";
 import {
   getPostComment,
@@ -159,11 +166,25 @@ const placeholder = ref("请输入评论");
 const showInput = ref(false);
 const keyBoardHeight = ref();
 const input = ref(null);
+const checkIfCollection = ref(false);
 
 const onClickLeft = () => history.back();
 
 onMounted(async () => {
   try {
+    if (localStorage.getItem("token")) {
+      getCurrentUser()
+        .then((user) => {
+          if (user) {
+            checkIfCollection.value = user.collections.includes(
+              route.params.postid
+            );
+          }
+        })
+        .catch((err) => {
+          checkIfCollection.value = false;
+        });
+    }
     postinfo.value = await getPost(route.params.postid);
     const { comments } = await getPostComment(route.params.postid);
     commentList.value = comments;
@@ -219,10 +240,18 @@ const handleComment = async () => {
   }
 };
 
+const handleCollection = async (postid) => {
+  const res = await addCollection(postid);
+  checkIfCollection.value = !res.checkIfCollection;
+  postinfo.value = await getPost(route.params.postid);
+  console.log(res);
+};
+
 const postComment = async () => {
   const { comments } = await createPostComment(route.params.postid, {
     content: commentContent.value,
   });
+  postinfo.value = await getPost(route.params.postid);
   console.log(comments);
   commentList.value = comments;
   showInput.value = !showInput.value;
