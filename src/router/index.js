@@ -60,6 +60,11 @@ const router = createRouter({
       name: "postinfo",
       component: () => import("../views/PostInfo.vue"),
     },
+    {
+      path: "/collection/:userid",
+      name: "Collection",
+      component: () => import("../views/Collection.vue"),
+    },
   ],
 });
 

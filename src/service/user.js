@@ -19,3 +19,7 @@ export function register(params) {
 export function addCollection(postid) {
   return axios.put(`/user/${postid}`);
 }
+
+export function getCollection(userid) {
+  return axios.get(`/user/${userid}`);
+}

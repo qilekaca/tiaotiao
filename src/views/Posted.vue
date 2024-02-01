@@ -8,12 +8,13 @@
       left-text="返回"
       @click-left="onClickLeft"
     />
+    <!-- list -->
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
       <van-list
         :loading="loading"
         :finished="finished"
         @load="onLoad"
-        finished-text="您当前还未发布过内容！"
+        finished-text="没有更多了"
       >
         <Card
           v-for="post in list"
@@ -23,6 +24,7 @@
         />
       </van-list>
     </van-pull-refresh>
+    <!-- 操作栏 -->
     <van-popup
       :show="showBottom"
       :style="{ height: '50%' }"

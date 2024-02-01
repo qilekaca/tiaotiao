@@ -34,14 +34,19 @@
         to="school"
         :value="user.school ? user.school : '请选择学校'"
       />
-      <van-cell icon="star-o" title="收藏" is-link to="collection" />
-      <van-cell icon="bullhorn-o" title="发布过" is-link to="posted" />
       <van-cell
+        icon="star-o"
+        title="收藏"
+        is-link
+        :to="{ name: 'Collection', params: { userid: user._id } }"
+      />
+      <van-cell icon="bullhorn-o" title="发布过" is-link to="posted" />
+      <!-- <van-cell
         icon="browsing-history-o"
         title="浏览记录"
         is-link
         to="viewed"
-      />
+      /> -->
     </van-cell-group>
 
     <!-- 发布 -->
