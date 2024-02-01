@@ -23,7 +23,7 @@
 
 <script setup>
 import Card from "../components/Card.vue";
-import { getPosts } from "../service/post";
+import { getCollection } from "../service/user";
 import { useRoute } from "vue-router";
 import { ref } from "vue";
 import _ from "lodash";
@@ -37,26 +37,16 @@ const route = useRoute();
 const onClickLeft = () => history.back();
 
 const onLoad = _.debounce(async () => {
-  const getCount = 10;
-  console.log("获取数据");
-
   if (refreshing.value) {
     console.log("下拉刷新");
     list.value = [];
     refreshing.value = false;
   }
-
-  const result = await getPosts(route.params.userid);
-
-  console.log(result);
-  list.value = list.value.concat(result.posts);
+  const { data } = await getCollection(route.params.userid);
+  list.value = data;
   console.log(list.value);
   loading.value = false;
-
-  if (result.posts.length < getCount) {
-    console.log("加载完成");
-    finished.value = true;
-  }
+  finished.value = true;
 }, 100);
 
 const onRefresh = async () => {
