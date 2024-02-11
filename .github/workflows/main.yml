@@ -30,4 +30,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "./dist/"
-          target: /root/docker/ngingx_proxy_manager/data/t.weiweiwei.site
+          target: /root/docker/ngingx_proxy_manager/data/test.weiweiwei.site
