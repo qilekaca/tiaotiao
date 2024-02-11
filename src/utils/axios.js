@@ -4,8 +4,8 @@ import router from "../router";
 
 axios.defaults.baseURL =
   import.meta.env.MODE == "development"
-    ? "http://192.168.31.148:3000/api"
-    : "https://weiweiwei.site:3000/api";
+    ? "http://localhost:3000/api"
+    : "https://api.weiweiwei.site/api";
 
 // 请求头添加 token
 // ⚠️修改此文件需要重启项目使其生效
