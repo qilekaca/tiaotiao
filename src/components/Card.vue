@@ -34,7 +34,7 @@
                   :src="post.author.image"
                 />
               </van-col>
-              <van-col span="21">
+              <van-col span="18">
                 <p style="font-weight: 600; margin-left: 10px">
                   {{ post.author.username }}
                 </p>
@@ -43,6 +43,14 @@
                 >
                   {{ formatDate(post.createdAt) }}
                 </p>
+              </van-col>
+              <van-col span="3">
+                <van-tag
+                  v-if="post.type == 'goods'"
+                  type="primary"
+                  size="medium"
+                  >转卖</van-tag
+                >
               </van-col>
             </van-row>
             <!-- 第二行 内容 图片 -->
@@ -74,6 +82,16 @@
                     "
                   />
                 </van-space>
+              </van-col>
+            </van-row>
+            <van-row v-if="post.type == 'goods'">
+              <van-col
+                span="24"
+                style="text-align: right; color: #ee0a24; font-weight: 600"
+              >
+                ¥<span style="font-size: 16px">
+                  {{ post.price }}
+                </span>
               </van-col>
             </van-row>
             <!-- 第三行 点赞 浏览 评论 -->

@@ -41,12 +41,14 @@
 import { showLoadingToast, closeToast } from "vant";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getCurrentUser, updateUser } from "@/service/user";
+import { updateUser } from "@/service/user";
 import { uploadImage } from "@/service/file";
 import { showFailToast } from "vant";
+import { useUserStore } from "../stores/user";
 
 const onClickLeft = () => history.back();
 
+const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 const title = ref("");
@@ -60,7 +62,7 @@ onMounted(async () => {
   } else {
     title.value = "设置名字";
   }
-  user.value = await getCurrentUser();
+  user.value = userStore.user;
 });
 
 const afterRead = async (file) => {
@@ -71,16 +73,15 @@ const afterRead = async (file) => {
   });
 
   try {
-    // 上传图片
-    const res = await uploadImage({ file });
-
-    // 更新用户信息
     // TODO:上传新头像后删除旧头像
+    const res = await uploadImage({ file });
     const user = await updateUser({
       user: {
         image: `https://${res.data.Location}`,
       },
     });
+
+    userStore.user = user;
     router.replace("/my");
     console.log(user);
   } catch (error) {
@@ -97,6 +98,8 @@ const setUsername = async () => {
         username: username.value,
       },
     });
+
+    userStore.user = user;
     router.replace("/my");
     console.log(user);
   } catch (error) {

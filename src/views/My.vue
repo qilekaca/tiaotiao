@@ -111,18 +111,16 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-
-import { getCurrentUser } from "@/service/user";
 import TabBar from "@/components/TabBar.vue";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 
 let user = ref({});
 const showBottom = ref(false);
 
 // 进入这个页面后获取用户信息
-onMounted(async () => {
-  const res = await getCurrentUser();
-  user.value = res;
-  console.log(user.value);
+onMounted(() => {
+  user.value = userStore.user;
 });
 </script>
 

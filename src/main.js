@@ -1,5 +1,9 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import App from "./App.vue";
+import router from "./router";
+import "./assets/main.css";
 import {
   Lazyload,
   showToast,
@@ -15,23 +19,11 @@ import "vant/es/dialog/style";
 import "vant/es/notify/style";
 import "vant/es/image-preview/style";
 
-import App from "./App.vue";
-import router from "./router";
-
-import "./assets/main.css";
-
-// import VConsole from "vconsole";
-
-// const vConsole = new VConsole();
-
-// import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
-
 const app = createApp(App);
-
 const pinia = createPinia();
 
-// pinia.use(piniaPluginPersistedstate);
-// app.use(vConsole);
+pinia.use(piniaPluginPersistedstate);
+
 app.use(pinia);
 app.use(router);
 app.use(Lazyload);

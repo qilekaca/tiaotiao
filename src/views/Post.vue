@@ -59,9 +59,10 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { showLoadingToast, closeToast } from "vant";
-import { getCurrentUser } from "../service/user";
 import { uploadImage, deleteImage } from "../service/file";
 import { createPost } from "../service/post";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 
 const user = ref({});
 const placeholder = ref("");
@@ -79,8 +80,7 @@ onMounted(async () => {
   } else {
     placeholder.value = "描述一下有什么好玩的";
   }
-  const userinfo = await getCurrentUser();
-  user.value = userinfo;
+  user.value = userStore.user;
 });
 
 const afterRead = async (file) => {

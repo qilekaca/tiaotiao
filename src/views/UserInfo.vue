@@ -35,14 +35,13 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { getCurrentUser } from "@/service/user";
+import { useUserStore } from "../stores/user";
 
-let user = ref({});
+const user = ref({});
+const userStore = useUserStore();
 
-onMounted(async () => {
-  const res = await getCurrentUser();
-  user.value = res;
-  console.log(user);
+onMounted(() => {
+  user.value = userStore.user;
 });
 
 const onClickLeft = () => history.back();

@@ -84,8 +84,10 @@ import { reactive } from "vue";
 import { login, register } from "@/service/user";
 import { showFailToast, showNotify } from "vant";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 const router = useRouter();
+const userStore = useUserStore();
 
 const checkPassword = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
@@ -103,21 +105,12 @@ const registerUserInfo = reactive({
 const validatorMessage = (val) => val == registerUserInfo.registerUserPassword;
 
 const Login = async () => {
-  const user = {
-    username: loginUserInfo.loginUsername,
-    password: loginUserInfo.loginPassword,
-  };
-  const res = await login({ user });
-  console.log("res:", res);
-  // res.token
-  localStorage.setItem("token", `Bearer ${res.token}`);
-  // 显示登陆成功信息并跳转到我的页面
-  // 刷新页面
+  await userStore.login(
+    loginUserInfo.loginUsername,
+    loginUserInfo.loginPassword
+  );
   showNotify({ type: "success", message: "登陆成功" });
   router.replace("/my");
-  setTimeout(() => {
-    location.reload();
-  }, 100);
 };
 
 const Register = async () => {

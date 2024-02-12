@@ -1,4 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import { useUserStore } from "../stores/user";
+import { getCurrentUser } from "../service/user";
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -12,11 +14,20 @@ const router = createRouter({
       name: "My",
       component: () => import("../views/My.vue"),
       // 用户进入我的页面之前判断用户是否登陆
-      beforeEnter(to, from, next) {
+      async beforeEnter(to, from, next) {
         let isAuthenticated = false;
-        if (localStorage.getItem("token")) isAuthenticated = true;
-        if (!isAuthenticated) next({ name: "Login" });
-        else next();
+        const userStore = useUserStore();
+        if (userStore.token) {
+          const user = await getCurrentUser();
+          if (user) {
+            isAuthenticated = true;
+          }
+        }
+        if (!isAuthenticated) {
+          userStore.user = {};
+          userStore.token = "";
+          next({ name: "Login" });
+        } else next();
       },
     },
     {

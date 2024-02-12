@@ -54,8 +54,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { areaList } from "@vant/area-data";
-import { getCurrentUser, updateUser } from "@/service/user";
+import { updateUser } from "@/service/user";
 import { getSchool } from "@/service/school";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 const user = ref({});
 const city = ref("请选择");
@@ -72,42 +75,44 @@ const customFieldName = {
 const onClickLeft = () => history.back();
 
 onMounted(async () => {
-  // 先获取用户信息
-  const userinfo = await getCurrentUser();
-  user.value = userinfo;
-  if (user.value.city) {
-    const list = await getSchool(user.value.city);
+  user.value = userStore.user;
+  if (userStore.user.city) {
+    const list = await getSchool(userStore.user.city);
     console.log(list);
     schoolList.value = list.data;
   }
-  console.log(userinfo);
 });
 
 const setCity = async ({ selectedOptions }) => {
   city.value = selectedOptions[1].text;
-  // 获取学校列表
-  if (city.value != user.value.city) {
+
+  if (city.value != userStore.user.city) {
     const list = await getSchool(city.value);
     console.log(list);
     schoolList.value = list.data;
   }
-  // 更新用户信息
-  if (city.value != user.value.city) {
+
+  if (city.value != userStore.user.city) {
     const userinfo = await updateUser({ user: { city: city.value } });
-    user.value = userinfo;
-    console.log(userinfo);
+    userStore.user = userinfo;
+    user.value = userStore.user;
+    console.log(userStore.user);
   }
+
   showCity.value = !showCity;
 };
 
 const setSchool = async ({ selectedIndexes }) => {
   school.value = schoolList.value[selectedIndexes[0]].school;
   console.log(school.value);
-  if (school.value != user.value.school) {
+
+  if (school.value != userStore.user.school) {
     const userinfo = await updateUser({ user: { school: school.value } });
-    console.log(userinfo);
-    user.value = userinfo;
+    userStore.user = userinfo;
+    user.value = userStore.user;
+    console.log(userStore.user);
   }
+
   showSchool.value = !showSchool;
 };
 </script>

@@ -64,12 +64,13 @@
 </template>
 
 <script setup>
-import { getCurrentUser } from "../service/user";
 import { getPosts, deletePost } from "../service/post";
 import { showLoadingToast, closeToast } from "vant";
 import Card from "../components/Card.vue";
 import { ref } from "vue";
 import _ from "lodash";
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 
 const list = ref([]);
 const loading = ref(false);
@@ -90,7 +91,7 @@ const onLoad = _.debounce(async () => {
     refreshing.value = false;
   }
 
-  const user = await getCurrentUser();
+  const user = userStore.user;
 
   const result = await getPosts({
     params: { limit: getCount, offset: list.value.length, author: user._id },

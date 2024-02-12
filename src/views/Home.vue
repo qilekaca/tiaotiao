@@ -24,16 +24,17 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onActivated } from "vue";
 import { showDialog } from "vant";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute, onBeforeRouteUpdate } from "vue-router";
 import { getPosts } from "@/service/post";
-import { getCurrentUser } from "../service/user";
+import { useUserStore } from "../stores/user";
 import Card from "@/components/Card.vue";
 import TabBar from "@/components/TabBar.vue";
 import _ from "lodash";
 
 const active = ref("OutCollegeList");
+const userStore = useUserStore();
 
 const itemType = reactive([
   {
@@ -95,7 +96,7 @@ const onRefresh = async () => {
 
 const beforeChange = async (name) => {
   try {
-    const user = await getCurrentUser();
+    const user = userStore.user;
     if (!user.school) {
       // 没选择学校
       showDialog({
@@ -121,6 +122,24 @@ const beforeChange = async (name) => {
     });
   }
 };
+
+defineExpose({ onRefresh });
+</script>
+
+<script>
+import { defineComponent } from "vue";
+export default defineComponent({
+  beforeRouteEnter(to, from, next) {
+    if (from.path == "/post") {
+      next((vm) => {
+        console.log("getPosts");
+        vm.onRefresh();
+      });
+    } else {
+      next();
+    }
+  },
+});
 </script>
 
 <style scoped></style>

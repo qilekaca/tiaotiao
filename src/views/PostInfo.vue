@@ -12,7 +12,7 @@
       <van-col span="22">
         <!-- 头像、昵称、创建时间 -->
         <van-row style="margin-top: 10px">
-          <van-col>
+          <van-col span="3">
             <van-skeleton avatar :loading="loading">
               <van-image
                 width="2.5rem"
@@ -23,15 +23,23 @@
               />
             </van-skeleton>
           </van-col>
-          <van-col>
+          <van-col span="18">
             <van-skeleton title :row="2" :loading="loading">
-              <p style="font-weight: 600; margin-left: 10px; color: #323233">
+              <p style="font-weight: 600; color: #323233">
                 {{ postinfo.author.username }}
               </p>
-              <p style="margin-left: 10px; color: #969799; font-size: 10px">
+              <p style="color: #969799; font-size: 10px">
                 {{ formatDate(postinfo.createdAt) }}
               </p>
             </van-skeleton>
+          </van-col>
+          <van-col span="3">
+            <van-tag
+              v-if="postinfo.type == 'goods'"
+              type="primary"
+              size="medium"
+              >转卖</van-tag
+            >
           </van-col>
         </van-row>
 
@@ -61,6 +69,17 @@
             />
           </van-space>
         </div>
+
+        <van-row v-if="postinfo.type == 'goods'">
+          <van-col
+            span="24"
+            style="text-align: right; color: #ee0a24; font-weight: 600"
+          >
+            ¥<span style="font-size: 16px">
+              {{ postinfo.price }}
+            </span>
+          </van-col>
+        </van-row>
 
         <!-- 数据展示 -->
         <van-row
@@ -143,13 +162,14 @@
 </template>
 
 <script setup>
-import { showImagePreview, showDialog } from "vant";
+import { showImagePreview, showConfirmDialog } from "vant";
 import { useRoute, useRouter } from "vue-router";
 import { onMounted, ref, nextTick, watch } from "vue";
 import { getPost } from "../service/post";
 import { formatDate } from "../utils/common";
 import { getCurrentUser, addCollection } from "../service/user";
 import CommentList from "../components/CommentList.vue";
+import { useUserStore } from "../stores/user";
 import {
   getPostComment,
   createPostComment,
@@ -167,15 +187,17 @@ const showInput = ref(false);
 const keyBoardHeight = ref();
 const input = ref(null);
 const checkIfCollection = ref(false);
+const userStore = useUserStore();
 
 const onClickLeft = () => history.back();
 
 onMounted(async () => {
   try {
-    if (localStorage.getItem("token")) {
+    if (userStore.token) {
       getCurrentUser()
         .then((user) => {
           if (user) {
+            userStore.user = user;
             checkIfCollection.value = user.collections.includes(
               route.params.postid
             );
@@ -231,7 +253,7 @@ const handleComment = async () => {
       "px";
     console.log(keyBoardHeight.value);
   } catch (error) {
-    showDialog({
+    showConfirmDialog({
       message: "登陆后才能评论哦！！",
       confirmButtonText: "登陆",
     }).then(() => {
@@ -241,10 +263,19 @@ const handleComment = async () => {
 };
 
 const handleCollection = async (postid) => {
-  const res = await addCollection(postid);
-  checkIfCollection.value = !res.checkIfCollection;
-  postinfo.value = await getPost(route.params.postid);
-  console.log(res);
+  try {
+    const res = await addCollection(postid);
+    checkIfCollection.value = !res.checkIfCollection;
+    postinfo.value = await getPost(route.params.postid);
+    console.log(res);
+  } catch (error) {
+    showConfirmDialog({
+      message: "登陆后才能收藏哦！！",
+      confirmButtonText: "登陆",
+    }).then(() => {
+      router.replace("/login");
+    });
+  }
 };
 
 const postComment = async () => {
